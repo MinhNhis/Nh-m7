@@ -10,22 +10,22 @@
                     <div class="col-md-6 col-lg-4">
                         <ul class="list-unstyled">
                             <li><a href="http://duan-1.php/site/index.php/?pages=trang-chinh&action=about">Giới Thiệu Về shop KBBOOK</a></li>
-                            <li><a href="#">Điều Khoản Sử Dụng</a></li>
-                            <li><a href="#">Chính Sách Bảo Mật</a></li>
+                            <li><a href="#">Chính sách bảo mật</a></li>
+                            <li><a href="#">Điều Khoản Sử Dụng<</a></li>
                             <li><a href="#">Chính Sách Bán Hàng</a></li>
                         </ul>
                     </div>
                     <div class="col-md-6 col-lg-4">
                         <ul class="list-unstyled">
                             <li><a href="#">Sách Mới</a></li>
+                            <li><a href="#">Sách cũ</a></li>
                             <li><a href="#">Sách Bán Chạy</a></li>
-                            <li><a href="#">Khuyến Mãi</a></li>
                         </ul>
                     </div>
                     <div class="col-md-6 col-lg-4">
                         <ul class="list-unstyled">
                             <li><a href="#">Hỗ Trợ Khách Hàng</a></li>
-                            <li><a href="#">Gửi Yêu Cầu Hỗ Trợ</a></li>
+                            <li><a href="#">Hỗ Trợ</a></li>
                             <li><a href="#">Tuyển Dụng</a></li>
                         </ul>
                     </div>
@@ -34,7 +34,7 @@
             <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
                 <h3 class="footer-heading mb-4">Khuyến mãi</h3> <a href="#" class="block-6"> <img src="<?= $content ?>images/banner.jpg" alt="Image placeholder" class="img-fluid rounded mb-4">
                     <h3 class="font-weight-light mb-0">Săn sale ngay số lượng có hạn</h3>
-                    <p>Khuyến mãi từ ngày 15 &mdash; 25, 2023</p>
+                    <p>Khuyến mãi từ ngày 12 &mdash; 25, 2023</p>
                 </a>
             </div>
             <div class="col-md-6 col-lg-3">
