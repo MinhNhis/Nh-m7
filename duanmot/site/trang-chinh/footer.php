@@ -4,7 +4,7 @@
             <div class="col-lg-6 mb-5 mb-lg-0">
                 <div class="row">
                     <div class="col-md-12">
-                        <h4 class="footer-heading mb-4"> 
+                        <h4 class="footer-heading mb-4">
                             VỀ CHÚNG TÔI</h4>
                     </div>
                     <div class="col-md-6 col-lg-4">
