@@ -8,13 +8,14 @@
                 <table class="table table-head-fixed text-nowrap">
                     <tr>
                         <th></th>
-                        <th>ID KH</th>
-                        <th>USER KH</th>
-                        <th>EMAIL KH</th>
-                        <th>PASS KH</th>
-                        <th>ADDRESS KH</th>
-                        <th>PHONE KH</th>
-                        <th>ROLE</th>
+                        <th>ID</th>
+                        <th>Tên đăng nhập</th>
+                        <th>Email</th>
+                        <th>Mật khẩu</th>
+                        <th>Địa chỉ</th>
+                        <th>SĐT</th>
+                        <th>Vai trò</th>
+                        <th>Hành động</th>
                         <th></th>
                     </tr>
                     <?php
@@ -54,7 +55,7 @@
 
                             <td>
                                 <a href="<?php echo $editUser ?>"><input class="btn btn-primary" type="button" value="Sửa" /></a>
-                                <a href="<?php echo $deleteUser ?>"> <input class="btn btn-danger" type="button" value="Xóa" /></a>
+                                <a href="#" onclick="confirmDelete('<?php echo $deleteUser ?>')"><input class="btn btn-danger" type="button" value="Xóa" /></a>
                             </td>
                         </tr>
 
@@ -68,3 +69,11 @@
         </form>
     </div>
 </div>
+
+<script>
+    function confirmDelete(deleteUrl) {
+        if (confirm("Bạn có chắc muốn xóa không?")) {
+            window.location.href = deleteUrl;
+        }
+    }
+</script>
