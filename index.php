@@ -48,6 +48,36 @@ case 'add-user':
             $listUser = pdo_query($sql);
             include_once('./taikhoan/index.php');
             break;
+        case "list-bill":
+            if (isset($_POST['btn-search-bill'])) {
+                $id = $_POST['search-bill'];
+                $listBill = $serviceCart->queryBill($id, 'array');
+                include_once('./bill/index.php');
+            } else {
+                $listBill = $serviceCart->queryBill();
+                include_once('./bill/index.php');
+            }
+            break;
+        case "delete-bill":
+            if (isset($_GET['id'])) {
+                $serviceCart->deleteBill($_GET['id']);
+                header('location: /admin/index.php?act=list-bill');
+            }
+            break;
+        case "edit-bill":
+            if (isset($_GET['id'])) {
+                $bill = $serviceCart->queryBill($_GET['id']);
+            }
+            include_once('./bill/editBill.php');
+            break;
+        case "update-bill":
+            if (isset($_POST['btn-update-bill'])) {
+                $status = $_POST['status'];
+                $id = $_POST['id'];
+                $serviceCart->updateBill($id, $status);
+                header('location: /admin/index.php?act=list-bill');
+            }
+            break;
                 }
 } else {
     include_once('./home.php');
