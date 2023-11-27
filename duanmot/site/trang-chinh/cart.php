@@ -131,7 +131,7 @@
               <div class="row">
                 <div class="col-md-12">
                   <button class="btn btn-primary btn-lg py-3 btn-block"
-                    onclick="window.location='da1/site/index.php/?pages=trang-chinh&action=checkout'">Thanh toán</button>
+                    onclick="window.location='../../upload/index.php/?pages=trang-chinh&action=checkout'">Thanh toán</button>
                 </div>
               </div>
             </div>

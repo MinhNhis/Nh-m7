@@ -1,6 +1,6 @@
 <?php
 
-define('BASE_URL','http://da1/');
+define('BASE_URL','http://dan1/');
 
 ?>
 <?if (!function_exists('create_slug')) {

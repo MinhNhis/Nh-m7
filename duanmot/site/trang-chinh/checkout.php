@@ -262,7 +262,7 @@
                   </div>
 
                   <div class="form-group">
-                    <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='da1/site/index.php/?pages=trang-chinh&action=cam-on'">Place Order</button>
+                    <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='../../upload/index.php/?pages=trang-chinh&action=cam-on'">Place Order</button>
                   </div>
 
                 </div>

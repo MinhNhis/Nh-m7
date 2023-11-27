@@ -1,273 +1,188 @@
 <?php
-session_start();
-//require "../config/mail.php";
-require "../config/base.php";
-require "../config/pdo.php";
-$assets = BASE_URL . "admin/assets/";
-?>
-<!DOCTYPE html>
-<html lang="en">
+include_once('../module/pod.php');
+include_once('../module/category.php');
+include_once('../module/auth.php');
+include_once('../module/cart.php');
+include_once('../module/product.php');
+include_once('../module/user.php');
+include_once('./header.php');
+if (isset($_GET['act'])) {
+    $act = $_GET['act'];
+    switch ($act) {
+        case 'add-category':
+            if (isset($_POST['add-new']))
+                insertCategory($_POST['tenloai']);
+            include_once('./danhmuc/add.php');
+            break;
+        case 'list-category':
+            $listCategory = loadCategoryAll();
+            include_once('./danhmuc/index.php');
+            break;
+        case 'delete-category':
+            if (isset($_GET['id']) && $_GET['id'] > 0)
+                deleteCategory($_GET['id']);
+            $listCategory = loadCategoryAll();
+            include_once('./danhmuc/index.php');
+            break;
+        case 'edit-category':
+            if (isset($_GET['id']) && $_GET['id'] > 0)
+                $result = loadOne($_GET['id']);
+            include_once('./danhmuc/update.php');
+            break;
+        case 'update-category':
+            if (isset($_POST['btn-update']))
+                updateCategory($_POST['id'], $_POST['tenloai']);
+            $listCategory = loadCategoryAll();
+            include_once('./danhmuc/index.php');
+            break;
+        case 'add-product':
+            $listCategory = loadCategoryAll();
+            if (isset($_POST['btn-add'])) {
+                $name = $_POST['name'];
+                $price = $_POST['price'];
+                $img = $_FILES['img'];
+                $nameImg = $img['name'];
+                $tmpImg = $img['tmp_name'];
+                move_uploaded_file($tmpImg, '../upload/' . $nameImg);
+                $description = $_POST['description'];
+                $idCategory = $_POST['id-category'];
+                $ProductService->insertProduct($name, $price, $nameImg, $description, $idCategory);
+            }
+            include_once('./sanpham/add.php');
+            break;
+        case "list-product":
+            $sql = "SELECT * FROM SANPHAM";
+            $listProduct = pdo_query($sql);
+            include_once('./sanpham/index.php');
+            break;
+        case "edit-product":
+            if (isset($_GET['id'])) {
+                $product = $ProductService->selectProductOne($_GET['id']);
+                $listCategory = loadCategoryAll();
+                include_once('./sanpham/update.php');
+            }
+            break;
+        case "delete-product":
+            if (isset($_GET['id'])) {
+                $ProductService->deleteCommentByProduct($_GET['id']);
+                $ProductService->deleteProduct($_GET['id']);
+            }
+            $listProduct = $ProductService->selectProductAll();
+            include_once('./sanpham/index.php');
+            break;
+        case "update-product":
+            if (isset($_POST['btn-update'])) {
+                $id = $_POST['id'];
+                $name = $_POST['name'];
+                $price = $_POST['price'];
+                $description = $_POST['description'];
+                $idCategory = $_POST['id-category'];
+                $img = $_FILES['img'];
+                $ProductService->updatePProduct($name, $price, $fileImg, $description, $idCategory, $id);
+            }
+            $sql = "SELECT * FROM SANPHAM";
+            $listProduct = pdo_query($sql);
+            include_once('./sanpham/index.php');
+            break;
+        case "list-user":
+            $listUser = $UserService->selectUserAll();
+            include_once('./taikhoan/index.php');
+            break;
+        case 'add-user':
+            if (isset($_POST['btn-add'])) {
+                $user = $_POST['user'];
+                $pass = $_POST['pass'];
+                $email = $_POST['email'];
+                $address = $_POST['address'];
+                $tel = $_POST['tel'];
+                $role = $_POST['role'];
+                $UserService->insertUser($user, $pass, $email, $address, $tel, $role);
+            }
+            include_once('./taikhoan/add.php');
+            break;
+        case "edit-user":
+            if (isset($_GET['id'])) {
+                $user = $UserService->selectUserOne($_GET['id']);
+                include_once('./taikhoan/update.php');
+            }
+            break;
+        case "delete-user":
+            if (isset($_GET['id'])) {
+                $UserService->deleteUser($_GET['id']);
+            }
+            $listUser = $UserService->selectUserAll();
+            include_once('./taikhoan/index.php');
+            break;
+        case "update-user":
+            if (isset($_POST['btn-update'])) {
+                $user = $_POST['user'];
+                $pass = $_POST['pass'];
+                $email = $_POST['email'];
+                $address = $_POST['address'];
+                $tel = $_POST['tel'];
+                $role = $_POST['role'];
+                $id = $_POST['id'];
+                $UserService->updateUser($user, $pass, $email, $address, $tel, $role, $id);
+            }
+            $sql = "SELECT * FROM TAIKHOAN";
+            $listUser = pdo_query($sql);
+            include_once('./taikhoan/index.php');
+            break;
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Dashboard</title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="<?= $assets . 'plugins/' ?>fontawesome-free/css/all.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet"
-          href="<?= $assets . 'plugins/' ?>tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="<?= $assets . 'plugins/' ?>icheck-bootstrap/icheck-bootstrap.min.css">
-    <!-- JQVMap -->
-    <link rel="stylesheet" href="<?= $assets . 'plugins/' ?>jqvmap/jqvmap.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="<?= $assets . 'dist/' ?>css/adminlte.min.css">
-    <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="<?= $assets . 'plugins/' ?>overlayScrollbars/css/OverlayScrollbars.min.css">
-    <!-- Daterange picker -->
-    <link rel="stylesheet" href="<?= $assets . 'plugins/' ?>daterangepicker/daterangepicker.css">
-    <!-- summernote -->
-    <link rel="stylesheet" href="<?= $assets . 'plugins/' ?>summernote/summernote-bs4.min.css">
-</head>
-
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
-
-    <?php
-    include "components/preloader.php";
-    ?>
-    <!-- Navbar -->
-    <?php
-    include "components/navbar.php";
-    ?>
-    <!-- /.navbar -->
-    <!-- Main Sidebar Container -->
-    <?php
-    include "components/sidebar.php"
-    ?>
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Dashboard</h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Dashboard v1</li>
-                        </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-        <!-- /.content-header -->
-
-        <!-- Main content -->
-        <section class="content">
-            <div class="container-fluid">
-
-                <?php
-
-                if (isset($_GET["pages"])) {
-                    switch ($_GET["pages"]) {
-                        case "product":
-
-                            switch ($_GET['action']) {
-                                case "list":
-                                    include "modules/product/list.php";
-                                    break;
-                                case "add":
-                                    include "modules/product/add.php";
-                                    break;
-                                case "edit":
-                                    include "modules/product/edit.php";
-                                    break;
-                                default:
-                                    include "modules/product/list.php";
-                                    break;
-
-                            }
-
-                            break;
-
-                        case "categories":
-
-                            switch ($_GET['action']) {
-                                case "list":
-                                    include "modules/categories/list.php";
-                                    break;
-                                case "add":
-                                    include "modules/categories/add.php";
-                                    break;
-                                case "edit":
-                                    include "modules/categories/edit.php";
-                                    break;
-                                default:
-                                    include "modules/categories/list.php";
-                                    break;
-
-                            }
-
-                            break;
-
-                        case "user":
-
-                            switch ($_GET['action']) {
-                                case "list":
-                                    include "modules/user/list.php";
-                                    break;
-                                case "add":
-                                    include "modules/user/add.php";
-                                    break;
-                                case "edit":
-                                    include "modules/user/edit.php";
-                                    break;
-                                default:
-                                    include "modules/user/list.php";
-                                    break;
-
-                            }
-
-                            break;
-
-                        case "order":
-
-                            switch ($_GET['action']) {
-                                case "list":
-                                    include "modules/order/list.php";
-                                    break;
-                                default:
-                                    include "modules/order/list.php";
-                                    break;
-
-                            }
-
-                            break;
-                        case "comment":
-
-                            switch ($_GET['action']) {
-                                case "list":
-                                    include "modules/comment/list.php";
-                                    break;
-                                default:
-                                    include "modules/comment/list.php";
-                                    break;
-
-                            }
-
-                            break;
-
-
-                        default:
-                            include "pages/dashboard.php";
-                            break;
-                    }
-                } else {
-
-                    include "pages/dashboard.php";
-                }
-                ?>
-
-            </div><!-- /.container-fluid -->
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-        All rights reserved.
-        <div class="float-right d-none d-sm-inline-block">
-            <b>Version</b> 3.2.0
-        </div>
-    </footer>
-
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<!-- jQuery -->
-<script src="<?= $assets . 'plugins/' ?>jquery/jquery.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="<?= $assets . 'plugins/' ?>jquery-ui/jquery-ui.min.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-    $.widget.bridge('uibutton', $.ui.button)
-</script>
-<!-- Bootstrap 4 -->
-<script src="<?= $assets . 'plugins/' ?>bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- ChartJS -->
-<script src="<?= $assets . 'plugins/' ?>chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<script src="<?= $assets . 'plugins/' ?>sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="<?= $assets . 'plugins/' ?>jqvmap/jquery.vmap.min.js"></script>
-<script src="<?= $assets . 'plugins/' ?>jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="<?= $assets . 'plugins/' ?>jquery-knob/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="<?= $assets . 'plugins/' ?>moment/moment.min.js"></script>
-<script src="<?= $assets . 'plugins/' ?>daterangepicker/daterangepicker.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="<?= $assets . 'plugins/' ?>tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Summernote -->
-<script src="<?= $assets . 'plugins/' ?>summernote/summernote-bs4.min.js"></script>
-<!-- overlayScrollbars -->
-<script src="<?= $assets . 'plugins/' ?>overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<!-- AdminLTE App -->
-<script src="<?= $assets . 'dist/' ?>js/adminlte.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="<?= $assets . 'dist/' ?>js/demo.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?= $assets . 'dist/' ?>js/pages/dashboard.js"></script>
-<script>
-    $(function () {
-        // Summernote
-        $('#summernote').summernote()
-
-        // CodeMirror
-        CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
-            mode: "htmlmixed",
-            theme: "monokai"
-        });
-    })
-</script>
-
-<!-- DataTables  & Plugins -->
-<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="../../plugins/jszip/jszip.min.js"></script>
-<script src="../../plugins/pdfmake/pdfmake.min.js"></script>
-<script src="../../plugins/pdfmake/vfs_fonts.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
-<script>
-    $(function () {
-        $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    });
-</script>
-</body>
-
-</html>
+        case "list-comment":
+            $listComment = $ProductService->selectCommentAll();
+            include_once('./binhluan/index.php');
+            break;
+        case "delete-comment":
+            if (isset($_GET['id'])) {
+                $ProductService->deleteComment($_GET['id']);
+            }
+            $listComment = $ProductService->selectCommentAll();
+            include_once('./binhluan/index.php');
+            break;
+        case "list-bill":
+            if (isset($_POST['btn-search-bill'])) {
+                $id = $_POST['search-bill'];
+                $listBill = $serviceCart->queryBill($id, 'array');
+                include_once('./bill/index.php');
+            } else {
+                $listBill = $serviceCart->queryBill();
+                include_once('./bill/index.php');
+            }
+            break;
+        case "delete-bill":
+            if (isset($_GET['id'])) {
+                $serviceCart->deleteBill($_GET['id']);
+                header('location: /admin/index.php?act=list-bill');
+            }
+            break;
+        case "edit-bill":
+            if (isset($_GET['id'])) {
+                $bill = $serviceCart->queryBill($_GET['id']);
+            }
+            include_once('./bill/editBill.php');
+            break;
+        case "update-bill":
+            if (isset($_POST['btn-update-bill'])) {
+                $status = $_POST['status'];
+                $id = $_POST['id'];
+                $serviceCart->updateBill($id, $status);
+                header('location: /admin/index.php?act=list-bill');
+            }
+            break;
+        case "analytics":
+            $listPro = $serviceCart->analytics();
+            include_once('./thongke/index.php');
+            break;
+        case "chart":
+            $listPro = $serviceCart->analytics();
+            include_once('./thongke/chart.php');
+            break;
+        default:
+            include_once('./home.php');
+            break;
+    }
+} else {
+    include_once('./home.php');
+}
+include_once('./footer.php');
