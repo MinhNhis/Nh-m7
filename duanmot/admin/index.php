@@ -1,4 +1,5 @@
 <?php
+
 include_once('../module/pod.php');
 include_once('../module/category.php');
 include_once('../module/auth.php');
@@ -6,21 +7,25 @@ include_once('../module/cart.php');
 include_once('../module/product.php');
 include_once('../module/user.php');
 include_once('./header.php');
+$serviceCategory = new ServiceCategory();
+
 if (isset($_GET['act'])) {
     $act = $_GET['act'];
     switch ($act) {
+
+        case 'login':
+            if (isset($_SESSION['s_user']) && (is_array($_SESSION['s_user'])) && (count($_SESSION['s_user']) > 0)) {
+                $admin = $_SESSION['s_user'];
+            } else {
+                header('location: admin/login.php');
+            }
+
         case 'add-category':
             if (isset($_POST['add-new']))
                 insertCategory($_POST['tenloai']);
             include_once('./danhmuc/add.php');
             break;
         case 'list-category':
-            $listCategory = loadCategoryAll();
-            include_once('./danhmuc/index.php');
-            break;
-        case 'delete-category':
-            if (isset($_GET['id']) && $_GET['id'] > 0)
-                deleteCategory($_GET['id']);
             $listCategory = loadCategoryAll();
             include_once('./danhmuc/index.php');
             break;
@@ -35,6 +40,26 @@ if (isset($_GET['act'])) {
             $listCategory = loadCategoryAll();
             include_once('./danhmuc/index.php');
             break;
+        case 'delete-category':
+            if (isset($_GET['id']) && $_GET['id'] > 0) {
+                $categoryId = $_GET['id'];
+
+                // Kiểm tra xem danh mục có sản phẩm hay không
+                if ($serviceCategory->isCategoryEmpty($categoryId)) {
+                    // Nếu danh mục không có sản phẩm, thực hiện xóa
+                    $serviceCategory->deleteCategory($categoryId);
+                    header('location:/admin/index.php?act=list-category');
+                    exit;
+                } else {
+                    // Nếu danh mục có sản phẩm, hiển thị thông báo lỗi
+                    echo "Không thể xóa danh mục có sản phẩm.";
+                    exit;
+                }
+            }
+            $listCategory = loadCategoryAll();
+            include_once('./danhmuc/index.php');
+            break;
+
         case 'add-product':
             $listCategory = loadCategoryAll();
             if (isset($_POST['btn-add'])) {
@@ -153,7 +178,8 @@ if (isset($_GET['act'])) {
         case "delete-bill":
             if (isset($_GET['id'])) {
                 $serviceCart->deleteBill($_GET['id']);
-                header('location: /admin/index.php?act=list-bill');
+                echo '<script>window.location.href = "/admin/index.php?act=list-bill";</script>';
+                exit;
             }
             break;
         case "edit-bill":
@@ -167,7 +193,8 @@ if (isset($_GET['act'])) {
                 $status = $_POST['status'];
                 $id = $_POST['id'];
                 $serviceCart->updateBill($id, $status);
-                header('location: /admin/index.php?act=list-bill');
+                echo '<script>window.location.href = "/admin/index.php?act=list-bill";</script>';
+                exit;
             }
             break;
         case "analytics":
