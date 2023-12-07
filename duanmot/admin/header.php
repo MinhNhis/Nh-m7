@@ -32,7 +32,7 @@
                 <li> <a href="index.php?act=list-bill"><i class="fa-solid fa-cart-shopping ico-side"></i>Quản kí đơn
                         hàng</a> </li>
                 <li> <a href="/admin/index.php?act=add-category"><i
-                            class="fa-solid fa-folder-open ico-side"></i>Quản lí danh muc</a> </li>
+                                class="fa-solid fa-folder-open ico-side"></i>Quản lí danh muc</a> </li>
                 <li> <a href="index.php?act=add-product"><i class="fa-solid fa-mug-hot ico-side"></i>Quản lí sản
                         phẩm</a> </li>
                 <li> <a href="index.php?act=list-user"><i class="fa-solid fa-user ico-side"></i>Quản lí người
@@ -41,6 +41,7 @@
                 </li>
                 <li> <a href="index.php?act=list-comment"><i class="fa-solid fa-user ico-side"></i>Quản lí bình
                         luận</a> </li>
+                <li><a href="logout.php"><i class="fa-solid fa-sign-out-alt ico-side"></i>Đăng xuất</a></li>
             </ul>
         </nav>
         <div class="main-content">
