@@ -1,0 +1,29 @@
+<div class="card">
+    <h4>THÊM MỚI LOẠI</h4>
+    <form action="index.php?act=add-category" method="POST" onsubmit="return validateForm()">
+        <!-- <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Mã loại</label>
+          <input type="text" name="maloai" class="form-control" aria-describedby="" disabled placeholder="">
+        </div> -->
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Tên loại</label>
+            <input type="text" name="tenloai" id="tenloai" class="form-control" placeholder="Nhập vào loại">
+            <div id="error_message" style="color: red;"></div>
+        </div>
+        <button type="submit" name="add-new" class="btn btn-primary">Thêm loại</button>
+        <button type="reset" class="btn btn-primary">Nhập lại</button>
+        <a href="index.php?act=list-category"><input class="btn btn-primary" type="button" value="Danh sách" /></a>
+    </form>
+</div>
+<script>
+    function validateForm() {
+        var tenloai = document.getElementById("tenloai").value;
+
+        if (tenloai.trim() === "") {
+            document.getElementById("error_message").innerHTML = "Vui lòng nhập vào tên loại";
+            return false;
+        }
+
+        return true;
+    }
+</script>
