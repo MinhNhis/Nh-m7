@@ -3,21 +3,19 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 mb-0"><a href="?pages=trang-chinh&action=trang-chu">Home</a> <span
-                        class="mx-2 mb-0">/</span> <a href="cart.html">Cart</a> <span class="mx-2 mb-0">/</span> <strong
+                        class="mx-2 mb-0">/</span> <a href="cart.html">cart</a> <span class="mx-2 mb-0">/</span> <strong
                         class="text-black">Checkout</strong></div>
             </div>
         </div>
     </div>
     <div class="site-section">
         <div class="container">
-            <form action="?pages=trang-chinh&action=bill-confirm" method="POST">
+            <form action="?pages=trang-chinh&action=oders_detail-confirm" method="POST">
                 <div class="row">
-
                     <div class="col-md-6 mb-5 mb-md-0">
                         <h2 class="h3 mb-3 text-black">Chi tiết thanh toán</h2>
-
                         <div class="p-3 p-lg-5 border">
-                            <?php if(isset($_SESSION['user'])) { ?>
+                            <?php if (isset($_SESSION['user'])) { ?>
                                 <div class="form-group row">
                                     <div class="col-md-12">
                                         <label for="c_fname" class="text-black">Người đặt hàng<span class="text-danger">*</span></label>
@@ -25,7 +23,6 @@
                                     </div>
                                 </div>
                             <?php } ?>
-
                             <div class="form-group row">
                                 <div class="col-md-12">
                                     <label for="c_address" class="text-black">Địa chỉ <span class="text-danger">*</span></label>
@@ -43,8 +40,6 @@
                                     <input type="text" class="form-control" name="tell" value="<?= $_SESSION['user']['tel'] ?>">
                                 </div>
                             </div>
-
-
                         </div>
                         <div class="form-group">
                             <label for="c_order_notes" class="text-black">Ghi chú</label>
@@ -66,7 +61,7 @@
                             <tbody>
                             <?php
                             $total = 0;
-                            foreach($_SESSION['listCart'] as $key => $value) {
+                            foreach ($_SESSION['listoders'] as $key => $value) {
                                 $total += $value[3];
                                 ?>
                                 <tr>
@@ -88,7 +83,6 @@
                                         <?= $total ?>
                                     </strong></td>
                             </tr>
-
                             </tbody>
                         </table>
                         <div class="mb-3">
@@ -103,7 +97,7 @@
                         </div>
                         <div class="">
                             <input type="hidden" name="total" value="<?= $total ?>">
-                            <input name="btn-confirm-bill" class=" btn btn-danger" type="submit" value="Đồng ý đặt hàng" />
+                            <input name="btn-confirm-oders_detail" class=" btn btn-danger" type="submit" value="Đồng ý đặt hàng" />
                         </div>
                     </div>
                 </div>

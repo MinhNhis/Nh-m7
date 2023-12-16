@@ -6,7 +6,7 @@
                         class="mx-2 mb-0">/</span> <strong class="text-black">Giỏ hàng</strong></div>
             </div>
             <?php
-            if (isset($_SESSION['listCart']) && !empty($_SESSION['listCart'])) {
+            if (isset($_SESSION['listoders']) && !empty($_SESSION['listoders'])) {
             ?>
         </div>
     </div>
@@ -30,9 +30,9 @@
                             <tbody>
                             <?php
                             $total = 0;
-                            foreach ($_SESSION['listCart'] as $key => $value) {
+                            foreach ($_SESSION['listoders'] as $key => $value) {
                                 $total += $value[3];
-                                $delete = "?pages=trang-chinh&action=delete-cart&id=$key";
+                                $delete = "?pages=trang-chinh&action=delete-oders&id=$key";
                                 ?>
                                 <tr>
                                     <td class="product-thumbnail">

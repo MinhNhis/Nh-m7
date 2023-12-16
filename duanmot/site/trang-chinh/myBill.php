@@ -25,14 +25,14 @@
 <div class="card-body">
     <div class="row">
         <div class="col-md-12 mb-0"><a href="site/index.php/?pages=trang-chinh&action=trang-chu">Trang chủ</a> <span
-                class="mx-2 mb-0">/</span> <strong class="text-black">Đơn hàng</strong></div>
+                    class="mx-2 mb-0">/</span> <strong class="text-black">Đơn hàng</strong></div>
     </div>
     <div class="card-header">
         <main class="catalog mb ">
             <div class="boxleft">
 
                 <?php
-                if(!empty($listBill)) {
+                if (!empty($listoders_detail)) {
                     ?>
                     <div class="box_content form_account" style="min-height: 20px;">
                         <table class="table table-head-fixed text-nowrap text-center">
@@ -44,13 +44,12 @@
                                 <th>Tình trang đơn hàng</th>
                             </tr>
                             <?php
-                            foreach($listBill as $key => $value) {
-                                $status = $serviceCart->getStatusBill($value['status']);
-                                $amount = $serviceCart->getAmountCart($value['id']);
+                            foreach ($listoders_detail as $key => $value) {
+                                $status = $serviceoders->getStatusoders_detail($value['status']);
+                                $amount = $serviceoders->getAmountoders($value['id']);
                                 ?>
-
                                 <tr>
-                                    <td style="padding: 10px 0; magin: 10px">
+                                    <td style="padding: 10px 0;">
                                         <?= $value['id'] ?>
                                     </td>
                                     <td style="padding: 10px 0;">
@@ -73,7 +72,8 @@
                     </div>
                     <br>
                     <div class="row mb10">
-                        <a href="?pages=trang-chinh&action=bill"> <input class="btn btn-primary" type="button" value="Tiếp tục" /></a>
+                        <a href="?pages=trang-chinh&action=oders_detail"> <input class="btn btn-primary" type="button"
+                                                                                 value="Tiếp tục" /></a>
                     </div>
                     <?php
                 } else {

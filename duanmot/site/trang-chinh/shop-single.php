@@ -97,8 +97,8 @@
     <div class="site-section">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
-                    <img src="/upload/<?php echo $img ?>" alt="Image" class="img-fluid">
+                <div class="col-md-4">
+                    <img src="/upload/<?php echo $img ?>" alt="Image" class="" style=" width: 250px; height: 350px; ">
                 </div>
                 <div class="col-md-6">
                     <h2 class="text-black">
@@ -108,7 +108,7 @@
                         <?php echo $mota ?>
                     </div>
                     <p><strong class="text-primary h4">
-                            <?php echo number_format( $price,0) ?>Đ
+                            <?php echo number_format($price, 0) ?>Đ
                         </strong></p>
                     <div class="mb-5">
                         <div class="input-group mb-3" style="max-width: 120px;">
@@ -123,19 +123,20 @@
                         </div>
                     </div>
                     <?php
-                    if(isset($_SESSION['user']) && $_SESSION['user']['id']) {
+                    if (isset($_SESSION['user']) && $_SESSION['user']['id']) {
                         ?>
-                        <form action="?pages=trang-chinh&action=add-cart" method="post">
+                        <form action="?pages=trang-chinh&action=add-oders" method="post">
                             <input type="hidden" value="<?= $id ?>" name="id">
                             <input type="hidden" value="<?= $name ?>" name="name">
                             <input type="hidden" value="<?= $img ?>" name="img">
                             <input type="hidden" value="<?= $price ?>" name="price">
-                            <button class="add" name="add-cart">Thêm vào giỏ hàng</button>
+                            <button class="add" name="add-oders">Thêm vào giỏ hàng</button>
                         </form>
                         <?php
                     } else {
                         ?>
-                        <button onclick="alert('Vui lòng đăng nhập')" class="buy-now btn btn-sm btn-primary" name="add-cart">Thêm vào giỏ hàng</button>
+                        <button onclick="alert('Vui lòng đăng nhập')" class="buy-now btn btn-sm btn-primary" name="add-oders">Thêm vào
+                            giỏ hàng</button>
                         <?php
 
                     }
@@ -146,15 +147,11 @@
             </div>
         </div>
     </div>
-
-
     <div class="container">
-
-
         <h4> Bình luận</h4>
-        <div class="card" >
+        <div class="card">
             <form>
-                <div class="form-group" >
+                <div class="">
                     <div class="card-body">
                         <div class="row mb10 formds_loai">
                             <table class="table table-head-fixed text-nowrap">
@@ -164,7 +161,7 @@
                                     <th>Ngày bình luận</th>
                                 </tr>
                                 <?php
-                                foreach($listComment as $key => $value) {
+                                foreach ($listComment as $key => $value) {
 
                                     ?>
                                     <tr>
@@ -184,19 +181,21 @@
                             </table>
                         </div>
                     </div>
-
                 </div>
             </form>
         </div>
-
-
-
-        <form action="?pages=trang-chinh&action=comment" method="POST">
-            <input type="hidden" name="id-pro" value="<?= $id ?>">
-            <textarea class="form-control" name="content" id="content" rows="2"
-                      placeholder="Nhập bình luận của bạn"></textarea>
-
-            <button type="submit" name="btn-comment" class="btn btn-primary">Gửi</button>
-        </form>
+        <?php
+        if (isset($_SESSION['user']) && $_SESSION['user']['id']) {
+            ?>
+            <form action="?pages=trang-chinh&action=comment" method="POST">
+                <input type="hidden" name="id-pro" value="<?= $id ?>">
+                <textarea class="form-control" name="content" id="content" rows="2"
+                          placeholder="Nhập bình luận của bạn"></textarea>
+                <button type="submit" name="btn-comment" class="btn btn-primary">Gửi</button>
+            </form>
+        <?php } else { ?>
+            <div class="primary" style="color: red; font-weight: bold;">Bạn cần đăng nhập để bình luận sản phẩm này ! </div>
+            <!-- <button onclick="alert('Vui lòng đăng nhập')" type="submit" name="btn-comment" class="btn btn-primary">Gửi</button> -->
+        <?php } ?>
     </div>
 </div>
