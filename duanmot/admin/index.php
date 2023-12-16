@@ -3,7 +3,7 @@
 include_once('../module/pod.php');
 include_once('../module/category.php');
 include_once('../module/auth.php');
-include_once('../module/cart.php');
+include_once('../module/oders.php');
 include_once('../module/product.php');
 include_once('../module/user.php');
 include_once('./header.php');
@@ -18,6 +18,7 @@ if (isset($_GET['act'])) {
                 $admin = $_SESSION['s_user'];
             } else {
                 header('location: admin/login.php');
+                exit;
             }
 
         case 'add-category':
@@ -165,44 +166,44 @@ if (isset($_GET['act'])) {
             $listComment = $ProductService->selectCommentAll();
             include_once('./binhluan/index.php');
             break;
-        case "list-bill":
-            if (isset($_POST['btn-search-bill'])) {
-                $id = $_POST['search-bill'];
-                $listBill = $serviceCart->queryBill($id, 'array');
+        case "list-oders_detail":
+            if (isset($_POST['btn-search-oders_detail'])) {
+                $id = $_POST['search-oders_detail'];
+                $listoders_detail = $serviceoders->queryoders_detail($id, 'array');
                 include_once('./bill/index.php');
             } else {
-                $listBill = $serviceCart->queryBill();
+                $listoders_detail = $serviceoders->queryoders_detail();
                 include_once('./bill/index.php');
             }
             break;
-        case "delete-bill":
+        case "delete-oders_detail":
             if (isset($_GET['id'])) {
-                $serviceCart->deleteBill($_GET['id']);
-                echo '<script>window.location.href = "/admin/index.php?act=list-bill";</script>';
+                $serviceoders->deleteoders_detail($_GET['id']);
+                echo '<script>window.location.href = "/admin/index.php?act=list-oders_detail";</script>';
                 exit;
             }
             break;
-        case "edit-bill":
+        case "edit-oders_detail":
             if (isset($_GET['id'])) {
-                $bill = $serviceCart->queryBill($_GET['id']);
+                $oders_detail = $serviceoders->queryoders_detail($_GET['id']);
             }
-            include_once('./bill/editBill.php');
+            include_once('./bill/editoders_detail.php');
             break;
-        case "update-bill":
-            if (isset($_POST['btn-update-bill'])) {
+        case "update-oders_detail":
+            if (isset($_POST['btn-update-oders_detail'])) {
                 $status = $_POST['status'];
                 $id = $_POST['id'];
-                $serviceCart->updateBill($id, $status);
-                echo '<script>window.location.href = "/admin/index.php?act=list-bill";</script>';
+                $serviceoders->updateoders_detail($id, $status);
+                echo '<script>window.location.href = "/admin/index.php?act=list-oders_detail";</script>';
                 exit;
             }
             break;
         case "analytics":
-            $listPro = $serviceCart->analytics();
+            $listPro = $serviceoders->analytics();
             include_once('./thongke/index.php');
             break;
         case "chart":
-            $listPro = $serviceCart->analytics();
+            $listPro = $serviceoders->analytics();
             include_once('./thongke/chart.php');
             break;
         default:
